@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#152A4A"/>
+      <stop offset="1" stop-color="#3730A3"/>
+    </linearGradient>
+    <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+      <path d="M60 0H0v60" fill="none" stroke="#ffffff" stroke-opacity="0.06" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="1600" height="1000" fill="url(#bg)"/>
+  <rect width="1600" height="1000" fill="url(#grid)"/>
+  <circle cx="1320" cy="780" r="280" fill="#818CF8" fill-opacity="0.15"/>
+  <circle cx="240" cy="220" r="260" fill="#60A5FA" fill-opacity="0.14"/>
+  <text x="800" y="465" text-anchor="middle" font-family="system-ui, sans-serif" font-size="72" font-weight="700" fill="#ffffff">Automatizācijas</text>
+  <text x="800" y="545" text-anchor="middle" font-family="system-ui, sans-serif" font-size="32" fill="#AEB9E8">Ievieto šeit plūsmas diagrammu vai ekrānuzņēmumu</text>
+  <text x="800" y="595" text-anchor="middle" font-family="system-ui, sans-serif" font-size="24" fill="#7583C2">public/projects/automation.png un atjauno ceļu lib/data.ts</text>
+</svg>
