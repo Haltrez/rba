@@ -69,10 +69,8 @@ export const projects: Project[] = [
     tagline:
       "AI validācijas platforma: ekspertu panelis no vairākiem AI aģentiem, kas apspriežas un sniedz strukturētu verdiktu par tavu ideju. Web un iOS.",
     tags: ["Next.js", "TypeScript", "AI aģenti", "iOS"],
-    /* TODO: aizvieto ar īstu ekrānuzņēmumu vai demo GIF:
-       ieliec failu public/projects/askjury.png (vai .gif) un nomaini ceļu */
-    image: "/projects/askjury.svg",
-    imageAlt: "Askjury.app lietotnes ekrānuzņēmums",
+    image: "/projects/askjury.jpg",
+    imageAlt: "Askjury.app mājaslapas ekrānuzņēmums",
     logo: "/projects/askjury-logo.png",
     liveUrl: "https://askjury.app",
     codeUrl: null,

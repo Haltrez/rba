@@ -3,7 +3,6 @@ import { projects, type Project } from "@/lib/data";
 import SectionHeading from "./SectionHeading";
 import Reveal from "./Reveal";
 import TiltCard from "./TiltCard";
-import CodeCard from "./CodeCard";
 import Icon from "./icons";
 
 function Tags({ tags }: { tags: string[] }) {
@@ -88,7 +87,7 @@ export default function Projects() {
         />
 
         <div className="grid gap-6">
-          {/* Izceltais projekts ar koda fragmentu */}
+          {/* Izceltais projekts ar stāstu par ideju */}
           {featured && (
             <Reveal>
               <TiltCard className={cardClass}>
@@ -114,20 +113,29 @@ export default function Projects() {
                     <p className="leading-relaxed text-ink-soft">
                       {featured.tagline}
                     </p>
+
+                    {/* Ideja aiz Askjury */}
+                    <div className="rounded-2xl border border-accent/15 bg-accent/5 p-5">
+                      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-accent">
+                        Ideja aiz projekta
+                      </p>
+                      <p className="mt-2.5 leading-relaxed text-ink">
+                        Mākslīgais intelekts pēc dabas ir noskaņots tev
+                        piekrist un teikt, ka tava ideja ir laba. Askjury to
+                        apgriež otrādi: promptēti aģenti ar dažādām lomām
+                        neglaimo, bet pasaka, kā ir. Katrs sniedz savu
+                        vērtējumu, un tu iegūsti godīgu, strukturētu verdiktu,
+                        nevis vienu patīkamu atbildi.
+                      </p>
+                    </div>
+
                     <Tags tags={featured.tags} />
                     <ProjectLinks project={featured} />
-                    <Media
-                      project={featured}
-                      sizes="(min-width: 1024px) 45vw, 100vw"
-                    />
                   </div>
-                  <div className="flex min-w-0 flex-col gap-3">
-                    <CodeCard />
-                    <p className="text-center text-sm text-ink-soft">
-                      Paneļa loģika vienkāršotā pierakstā: vairāki aģenti ar
-                      lomām, kopīga apspriede, strukturēts verdikts.
-                    </p>
-                  </div>
+                  <Media
+                    project={featured}
+                    sizes="(min-width: 1024px) 45vw, 100vw"
+                  />
                 </div>
               </TiltCard>
             </Reveal>

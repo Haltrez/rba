@@ -30,7 +30,7 @@ Launch with `executablePath: "/opt/pw-browsers/chromium"`. Flows worth driving:
   Mock the endpoint with page.route in tests; a real POST would trigger
   FormSubmit's activation email to the owner.
 - Mobile 390x844 (`isMobile: true`): `document.documentElement.scrollWidth`
-  must equal 390 (min-w-0 guards the CodeCard pre from widening the grid).
+  must equal 390 (min-w-0 guards flex/grid children from widening the row).
 - Mobile menu: open via `button[aria-label="Atvērt izvēlni"]`, click a link
   with `.last()` (two links share each href: desktop ul + mobile panel; strict
   mode fails otherwise), confirm menu closes AND window.scrollY actually moved.
