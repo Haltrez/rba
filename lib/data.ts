@@ -73,6 +73,7 @@ export const projects: Project[] = [
     imageAlt: "Askjury.app mājaslapas ekrānuzņēmums",
     logo: "/projects/askjury-logo.png",
     liveUrl: "https://askjury.app",
+    liveLabel: "Mājaslapa",
     codeUrl: null,
     featured: true,
   },
