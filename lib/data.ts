@@ -96,9 +96,8 @@ export const projects: Project[] = [
     tagline:
       "Personālatlases automatizācijas aģentūra: AI aģenti un procesu plūsmas, kas atlasa kandidātus un automatizē atlases rutīnu.",
     tags: ["n8n", "Make", "Python", "AI aģenti"],
-    /* TODO: aizvieto ar īstu ekrānuzņēmumu: public/projects/smartemploy.png */
-    image: "/projects/smartemploy.svg",
-    imageAlt: "SmartEmploy automatizācijas plūsmas ekrānuzņēmums",
+    image: "/projects/smartemploy.jpg",
+    imageAlt: "SmartEmploy mājaslapas ekrānuzņēmums",
     liveUrl: "https://smartemploy.io",
     liveLabel: "Mājaslapa",
     codeUrl: null,
