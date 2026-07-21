@@ -2,8 +2,51 @@
 
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { localeHref, otherLocale, type Dict, type Locale } from "@/lib/i18n";
+import { localeHref, type Dict, type Locale } from "@/lib/i18n";
 import Icon from "./icons";
+
+/* Divu pogu valodas pārslēdzis: LV | EN, aktīvā iezīmēta */
+function LangSwitch({
+  locale,
+  ariaLabel,
+  className = "",
+}: {
+  locale: Locale;
+  ariaLabel: string;
+  className?: string;
+}) {
+  const seg = (loc: Locale, label: string) => {
+    const base =
+      "rounded-full px-3 py-1.5 text-xs font-bold transition-colors";
+    if (loc === locale) {
+      return (
+        <span aria-current="true" className={`${base} bg-ink text-white`}>
+          {label}
+        </span>
+      );
+    }
+    return (
+      <a
+        href={localeHref(loc)}
+        hrefLang={loc}
+        className={`${base} text-ink-soft hover:text-ink`}
+      >
+        {label}
+      </a>
+    );
+  };
+
+  return (
+    <div
+      role="group"
+      aria-label={ariaLabel}
+      className={`flex items-center gap-0.5 rounded-full border border-ink/12 p-0.5 ${className}`}
+    >
+      {seg("lv", "LV")}
+      {seg("en", "EN")}
+    </div>
+  );
+}
 
 export default function Nav({
   dict,
@@ -14,7 +57,6 @@ export default function Nav({
 }) {
   const navLinks = dict.nav.links;
   const observedIds = ["sakums", ...navLinks.map((l) => l.id)];
-  const otherHref = localeHref(otherLocale(locale));
 
   const [active, setActive] = useState("sakums");
   const [scrolled, setScrolled] = useState(false);
@@ -112,15 +154,8 @@ export default function Nav({
             })}
           </ul>
 
-          <div className="hidden items-center gap-2 md:flex">
-            <a
-              href={otherHref}
-              hrefLang={otherLocale(locale)}
-              aria-label={dict.nav.switchAria}
-              className="rounded-full border border-ink/12 px-3 py-2 text-sm font-semibold text-ink-soft transition-colors hover:border-accent/40 hover:text-accent"
-            >
-              {dict.nav.switchTo}
-            </a>
+          <div className="hidden items-center gap-2.5 md:flex">
+            <LangSwitch locale={locale} ariaLabel={dict.nav.switchAria} />
             <a
               href="#kontakti"
               className="rounded-full bg-ink px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-accent"
@@ -161,7 +196,7 @@ export default function Nav({
                     </a>
                   </li>
                 ))}
-                <li className="mt-1 flex gap-2">
+                <li className="mt-1 flex items-stretch gap-2">
                   <a
                     href="#kontakti"
                     onClick={(e) => goToFromMenu(e, "kontakti")}
@@ -169,14 +204,11 @@ export default function Nav({
                   >
                     {dict.nav.cta}
                   </a>
-                  <a
-                    href={otherHref}
-                    hrefLang={otherLocale(locale)}
-                    aria-label={dict.nav.switchAria}
-                    className="rounded-xl border border-ink/12 px-5 py-3 text-center text-base font-semibold text-ink-soft"
-                  >
-                    {dict.nav.switchTo}
-                  </a>
+                  <LangSwitch
+                    locale={locale}
+                    ariaLabel={dict.nav.switchAria}
+                    className="shrink-0"
+                  />
                 </li>
               </ul>
             </motion.div>
