@@ -26,8 +26,9 @@ Launch with `executablePath: "/opt/pw-browsers/chromium"`. Flows worth driving:
 - Desktop 1440x900: click each header nav link, confirm smooth scroll and that
   the active link picks up `text-accent` (IntersectionObserver pill).
 - Contact form: empty submit must show native validation on `#name`; filled
-  submit with empty `formspreeId` must NOT hit formspree (mailto branch).
-- CV button `a[href="/cv/roberts-buda-cv.pdf"]` must trigger a download.
+  submit POSTs to formsubmit.co/ajax (or Formspree if formspreeId set).
+  Mock the endpoint with page.route in tests; a real POST would trigger
+  FormSubmit's activation email to the owner.
 - Mobile 390x844 (`isMobile: true`): `document.documentElement.scrollWidth`
   must equal 390 (min-w-0 guards the CodeCard pre from widening the grid).
 - Mobile menu: open via `button[aria-label="Atvērt izvēlni"]`, click a link

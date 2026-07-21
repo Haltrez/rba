@@ -14,13 +14,10 @@ export const site = {
   phone: "+371 28629982",
   phoneHref: "tel:+37128629982",
 
-  /* TODO: aizvieto public/cv/roberts-buda-cv.pdf ar savu īsto CV (PDF).
-     Faila nosaukumu vari atstāt to pašu, tad šis ceļš nav jāmaina. */
-  cvUrl: "/cv/roberts-buda-cv.pdf",
-
-  /* TODO: ieliec savu Formspree formas ID (piem. "mdorwxyz").
-     Bezmaksas konts: https://formspree.io (izveido formu, nokopē ID).
-     Ja atstāsi tukšu, kontaktu forma atvērs e-pasta klientu (mailto). */
+  /* Kontaktu forma pēc noklusējuma sūta caur formsubmit.co uz site.email
+     (bez reģistrācijas; pirmajā ziņā atnāks apstiprinājuma e-pasts,
+     tas jāapstiprina vienu reizi). Ja gribi Formspree, ieliec šeit
+     formas ID (piem. "mdorwxyz"), un forma sūtīs caur Formspree. */
   formspreeId: "",
 };
 
@@ -31,17 +28,10 @@ export type Social = {
 };
 
 export const socials: Social[] = [
-  /* TODO: nomaini visus trīs linkus pret saviem īstajiem profiliem */
-  { label: "GitHub", icon: "github", href: "https://github.com/TODO" },
   {
     label: "LinkedIn",
     icon: "linkedin",
-    href: "https://www.linkedin.com/in/TODO",
-  },
-  {
-    label: "Instagram",
-    icon: "instagram",
-    href: "https://www.instagram.com/TODO",
+    href: "https://www.linkedin.com/in/robertsbuda/",
   },
 ];
 
@@ -60,8 +50,12 @@ export type Project = {
   tags: string[];
   image: string;
   imageAlt: string;
+  /* Neliels produkta logo blakus nosaukumam (nav obligāts) */
+  logo?: string;
   /* null = pogu nerāda. TODO: ieliec īstos linkus, kur tādi ir. */
   liveUrl: string | null;
+  /* Pogas teksts live linkam (noklusējums "Live demo") */
+  liveLabel?: string;
   codeUrl: string | null;
   /* Piezīme, ko rāda, ja projektam nav publisku linku */
   privateNote?: string;
@@ -79,8 +73,9 @@ export const projects: Project[] = [
        ieliec failu public/projects/askjury.png (vai .gif) un nomaini ceļu */
     image: "/projects/askjury.svg",
     imageAlt: "Askjury.app lietotnes ekrānuzņēmums",
-    liveUrl: "https://askjury.app" /* TODO: pārbaudi, vai links ir pareizs */,
-    codeUrl: null /* TODO: GitHub links, ja kods ir publisks */,
+    logo: "/projects/askjury-logo.png",
+    liveUrl: "https://askjury.app",
+    codeUrl: null,
     featured: true,
   },
   {
@@ -89,12 +84,11 @@ export const projects: Project[] = [
     tagline:
       "Modinātāja lietotne ar uzvedības ekonomikas mehānismu: liec naudas likmi, un, ja nepamosties, tā aiziet labdarībai.",
     tags: ["iOS", "Swift", "Maksājumi", "Uzvedības ekonomika"],
-    /* TODO: aizvieto ar īstu ekrānuzņēmumu: public/projects/wakify.png */
-    image: "/projects/wakify.svg",
-    imageAlt: "Wakify lietotnes ekrānuzņēmums",
-    liveUrl: null /* TODO: App Store vai landing lapas links */,
+    image: "/projects/wakify.jpg",
+    imageAlt: "Wakify Smart Alarm lietotnes ikona",
+    liveUrl: "https://apps.apple.com/us/app/wakify-smart-alarm/id6753948316",
+    liveLabel: "App Store",
     codeUrl: null,
-    privateNote: "Demo pēc pieprasījuma",
   },
   {
     slug: "smartemploy",
@@ -105,9 +99,9 @@ export const projects: Project[] = [
     /* TODO: aizvieto ar īstu ekrānuzņēmumu: public/projects/smartemploy.png */
     image: "/projects/smartemploy.svg",
     imageAlt: "SmartEmploy automatizācijas plūsmas ekrānuzņēmums",
-    liveUrl: null /* TODO: mājaslapas links vai case study links */,
+    liveUrl: "https://smartemploy.io",
+    liveLabel: "Mājaslapa",
     codeUrl: null,
-    privateNote: "Klientu darbi, stāstu klātienē",
   },
   {
     slug: "bpa",

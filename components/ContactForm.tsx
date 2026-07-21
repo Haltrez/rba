@@ -16,21 +16,18 @@ export default function ContactForm() {
     const form = e.currentTarget;
     const data = new FormData(form);
 
-    /* Ja Formspree ID nav norādīts (lib/data.ts), atveram e-pasta klientu */
-    if (!site.formspreeId) {
-      const subject = encodeURIComponent(
-        `Ziņa no rba.lv: ${data.get("name") ?? ""}`,
-      );
-      const body = encodeURIComponent(
-        `${data.get("message") ?? ""}\n\nNo: ${data.get("name") ?? ""} (${data.get("email") ?? ""})`,
-      );
-      window.location.href = `mailto:${site.email}?subject=${subject}&body=${body}`;
-      return;
-    }
+    /* Noklusējums: formsubmit.co sūta ziņu uz site.email bez reģistrācijas
+       (pirmā ziņa atsūtīs vienreizēju apstiprinājuma e-pastu).
+       Ja lib/data.ts ir norādīts formspreeId, sūtām caur Formspree. */
+    const endpoint = site.formspreeId
+      ? `https://formspree.io/f/${site.formspreeId}`
+      : `https://formsubmit.co/ajax/${site.email}`;
+
+    data.append("_subject", "Ziņa no rba.lv");
 
     setStatus("sending");
     try {
-      const res = await fetch(`https://formspree.io/f/${site.formspreeId}`, {
+      const res = await fetch(endpoint, {
         method: "POST",
         body: data,
         headers: { Accept: "application/json" },
@@ -48,6 +45,15 @@ export default function ContactForm() {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+      {/* Medus poda lauks pret spamu, cilvēki to neredz */}
+      <input
+        type="text"
+        name="_honey"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+        className="hidden"
+      />
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
           <label

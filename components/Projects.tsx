@@ -31,7 +31,7 @@ function ProjectLinks({ project }: { project: Project }) {
           rel="noopener noreferrer"
           className="inline-flex items-center gap-1.5 rounded-full bg-ink px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-accent"
         >
-          Live demo
+          {project.liveLabel ?? "Live demo"}
           <Icon name="arrow-up-right" className="h-4 w-4" />
         </a>
       )}
@@ -97,9 +97,20 @@ export default function Projects() {
                     <p className="text-xs font-semibold uppercase tracking-[0.22em] text-accent">
                       Izceltais projekts
                     </p>
-                    <h3 className="font-display text-2xl font-bold text-ink sm:text-3xl">
-                      {featured.title}
-                    </h3>
+                    <div className="flex items-center gap-3">
+                      {featured.logo && (
+                        <Image
+                          src={featured.logo}
+                          alt=""
+                          width={44}
+                          height={44}
+                          className="rounded-xl shadow-card"
+                        />
+                      )}
+                      <h3 className="font-display text-2xl font-bold text-ink sm:text-3xl">
+                        {featured.title}
+                      </h3>
+                    </div>
                     <p className="leading-relaxed text-ink-soft">
                       {featured.tagline}
                     </p>
@@ -132,9 +143,20 @@ export default function Projects() {
                     sizes="(min-width: 1024px) 30vw, (min-width: 768px) 45vw, 100vw"
                   />
                   <div className="flex flex-1 flex-col gap-4 pt-5">
-                    <h3 className="font-display text-xl font-bold text-ink">
-                      {project.title}
-                    </h3>
+                    <div className="flex items-center gap-2.5">
+                      {project.logo && (
+                        <Image
+                          src={project.logo}
+                          alt=""
+                          width={32}
+                          height={32}
+                          className="rounded-lg shadow-card"
+                        />
+                      )}
+                      <h3 className="font-display text-xl font-bold text-ink">
+                        {project.title}
+                      </h3>
+                    </div>
                     <p className="flex-1 text-sm leading-relaxed text-ink-soft">
                       {project.tagline}
                     </p>

@@ -46,9 +46,9 @@ export default function About() {
               </p>
               <p>
                 Askjury, Wakify un SmartEmploy ir tapuši tieši tā: ātrs
-                prototips, reāli lietotāji, iterācijas pēc datiem. Ja tev vajag
-                cilvēku, kuram AI rīki ir dabiska darba vide, nevis modes
-                lieta, mēs sapratīsimies.
+                prototips, reāli lietotāji, uzlabojumi pēc datiem. Ja ir
+                nepieciešams cilvēks, kuram AI rīki ir dabiska darba vide,
+                nevis modes lieta, mēs sapratīsimies.
               </p>
             </div>
             {/* TODO: ja gribi šeit savu foto, ieliec failu public/me.jpg un

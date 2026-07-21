@@ -22,7 +22,7 @@ export default function Contact() {
               Kontakti
             </p>
             <h2 className="mt-3 font-display text-3xl font-bold tracking-tight sm:text-4xl lg:text-[2.75rem] lg:leading-[1.15]">
-              Uzbūvēsim kaut ko kopā
+              Sadarbosimies!
             </h2>
             <p className="mt-5 max-w-md text-lg leading-relaxed text-slate-300">
               Atvērts darba un projektu piedāvājumiem: AI aģenti,
@@ -61,22 +61,13 @@ export default function Contact() {
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label={social.label}
-                  className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-slate-300 transition-all duration-300 hover:-translate-y-1 hover:border-sky-300/50 hover:text-sky-300"
+                  className="inline-flex h-11 items-center gap-2.5 rounded-xl border border-white/10 bg-white/5 px-4 text-slate-300 transition-all duration-300 hover:-translate-y-1 hover:border-sky-300/50 hover:text-sky-300"
                 >
                   <Icon name={social.icon} className="h-5 w-5" />
+                  <span className="text-sm font-medium">{social.label}</span>
                 </a>
               ))}
             </div>
-
-            <a
-              href={site.cvUrl}
-              download
-              className="mt-9 inline-flex items-center gap-2 rounded-full bg-white px-7 py-3.5 font-semibold text-ink transition-all duration-300 hover:-translate-y-0.5 hover:bg-sky-100"
-            >
-              <Icon name="download" className="h-5 w-5" />
-              Lejupielādēt CV
-            </a>
           </Reveal>
 
           <Reveal delay={0.15}>

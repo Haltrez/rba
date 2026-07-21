@@ -22,19 +22,21 @@ npm run start
 Viss teksts un linki dzīvo vienā failā: `lib/data.ts`. Tur ir `TODO`
 komentāri pie katras vietas, kas jāaizpilda:
 
-1. **Soc. tīklu linki**: `socials` masīvā nomaini GitHub, LinkedIn un
-   Instagram adreses.
+1. **Soc. tīkli**: `socials` masīvā pašlaik ir LinkedIn
+   (linkedin.com/in/robertsbuda). Vari pievienot citus pēc tā paša parauga.
 2. **Projektu linki**: katram projektam `liveUrl` un `codeUrl`. Ja links ir
-   `null`, poga netiek rādīta.
+   `null`, poga netiek rādīta. Askjury, Wakify (App Store) un SmartEmploy
+   linki jau ir ielikti.
 3. **Projektu attēli**: ieliec savus ekrānuzņēmumus vai demo GIF failus mapē
-   `public/projects` (piem. `askjury.png` vai `askjury.gif`) un nomaini
-   `image` ceļu attiecīgajam projektam. Pašlaik tur ir SVG placeholderi.
-4. **CV**: aizvieto `public/cv/roberts-buda-cv.pdf` ar savu īsto CV.
-   Ja atstāj to pašu faila nosaukumu, kods nav jāmaina.
-5. **Kontaktu forma**: pēc noklusējuma poga atver e-pasta klientu (mailto).
-   Ja gribi īstu formu, izveido bezmaksas formu vietnē formspree.io un
-   ieliec tās ID `site.formspreeId` laukā.
-6. **OG attēls**: `public/og.png` ir ģenerēts no `scripts/og.html`. Ja gribi
+   `public/projects` un nomaini `image` ceļu attiecīgajam projektam.
+   Wakify jau ir kartītes attēls ar īsto ikonu; Askjury un automatizāciju
+   kartītēm vēl ir SVG placeholderi.
+4. **Kontaktu forma**: pēc noklusējuma ziņas sūta formsubmit.co uz
+   `site.email` bez reģistrācijas. Pēc pirmās iesūtītās ziņas atnāks
+   vienreizējs apstiprinājuma e-pasts no FormSubmit, tas jāapstiprina,
+   un no tā brīža visas ziņas nonāk pastkastē. Ja gribi Formspree,
+   ieliec formas ID `site.formspreeId` laukā.
+5. **OG attēls**: `public/og.png` ir ģenerēts no `scripts/og.html`. Ja gribi
    citu, aizvieto failu ar savu 1200x630 attēlu vai palaid
    `node scripts/generate-assets.mjs` (vajag `playwright-core` un Chromium).
 
