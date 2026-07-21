@@ -2,12 +2,20 @@
 
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { navLinks } from "@/lib/data";
+import { localeHref, otherLocale, type Dict, type Locale } from "@/lib/i18n";
 import Icon from "./icons";
 
-const observedIds = ["sakums", ...navLinks.map((l) => l.href.slice(1))];
+export default function Nav({
+  dict,
+  locale,
+}: {
+  dict: Dict;
+  locale: Locale;
+}) {
+  const navLinks = dict.nav.links;
+  const observedIds = ["sakums", ...navLinks.map((l) => l.id)];
+  const otherHref = localeHref(otherLocale(locale));
 
-export default function Nav() {
   const [active, setActive] = useState("sakums");
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
@@ -21,10 +29,9 @@ export default function Nav() {
 
   /* Mobilajā izvēlnē aizvēršanās animācija atceļ pārlūka smooth scroll,
      tāpēc ritinām paši: aizveram izvēlni un pēc animācijas aizritinām */
-  function goToFromMenu(e: React.MouseEvent<HTMLAnchorElement>, href: string) {
+  function goToFromMenu(e: React.MouseEvent<HTMLAnchorElement>, id: string) {
     e.preventDefault();
     setOpen(false);
-    const id = href.slice(1);
     const behavior: ScrollBehavior = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches
@@ -32,7 +39,7 @@ export default function Nav() {
       : "smooth";
     window.setTimeout(() => {
       document.getElementById(id)?.scrollIntoView({ behavior });
-      history.replaceState(null, "", href);
+      history.replaceState(null, "", `#${id}`);
     }, 320);
   }
 
@@ -51,7 +58,8 @@ export default function Nav() {
       if (el) observer.observe(el);
     }
     return () => observer.disconnect();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [locale]);
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 px-4 pt-4">
@@ -65,7 +73,7 @@ export default function Nav() {
         }`}
       >
         <nav
-          aria-label="Galvenā navigācija"
+          aria-label={dict.nav.ariaNav}
           className="flex items-center justify-between px-5 py-3"
         >
           <a
@@ -77,16 +85,13 @@ export default function Nav() {
 
           <ul className="hidden items-center gap-1 md:flex">
             {navLinks.map((link) => {
-              const id = link.href.slice(1);
-              const isActive = active === id;
+              const isActive = active === link.id;
               return (
-                <li key={link.href}>
+                <li key={link.id}>
                   <a
-                    href={link.href}
+                    href={`#${link.id}`}
                     className={`relative rounded-full px-4 py-2 text-sm font-medium transition-colors ${
-                      isActive
-                        ? "text-accent"
-                        : "text-ink-soft hover:text-ink"
+                      isActive ? "text-accent" : "text-ink-soft hover:text-ink"
                     }`}
                   >
                     {isActive && (
@@ -107,18 +112,28 @@ export default function Nav() {
             })}
           </ul>
 
-          <a
-            href="#kontakti"
-            className="hidden rounded-full bg-ink px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-accent md:inline-flex"
-          >
-            Sazināties
-          </a>
+          <div className="hidden items-center gap-2 md:flex">
+            <a
+              href={otherHref}
+              hrefLang={otherLocale(locale)}
+              aria-label={dict.nav.switchAria}
+              className="rounded-full border border-ink/12 px-3 py-2 text-sm font-semibold text-ink-soft transition-colors hover:border-accent/40 hover:text-accent"
+            >
+              {dict.nav.switchTo}
+            </a>
+            <a
+              href="#kontakti"
+              className="rounded-full bg-ink px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-accent"
+            >
+              {dict.nav.cta}
+            </a>
+          </div>
 
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}
             aria-expanded={open}
-            aria-label={open ? "Aizvērt izvēlni" : "Atvērt izvēlni"}
+            aria-label={open ? dict.nav.closeMenu : dict.nav.openMenu}
             className="rounded-full p-2 text-ink transition-colors hover:bg-accent/10 md:hidden"
           >
             <Icon name={open ? "close" : "menu"} className="h-6 w-6" />
@@ -136,23 +151,31 @@ export default function Nav() {
             >
               <ul className="flex flex-col gap-1 px-4 pb-4">
                 {navLinks.map((link) => (
-                  <li key={link.href}>
+                  <li key={link.id}>
                     <a
-                      href={link.href}
-                      onClick={(e) => goToFromMenu(e, link.href)}
+                      href={`#${link.id}`}
+                      onClick={(e) => goToFromMenu(e, link.id)}
                       className="block rounded-xl px-4 py-3 text-base font-medium text-ink transition-colors hover:bg-accent/10 hover:text-accent"
                     >
                       {link.label}
                     </a>
                   </li>
                 ))}
-                <li>
+                <li className="mt-1 flex gap-2">
                   <a
                     href="#kontakti"
-                    onClick={(e) => goToFromMenu(e, "#kontakti")}
-                    className="mt-1 block rounded-xl bg-ink px-4 py-3 text-center text-base font-semibold text-white"
+                    onClick={(e) => goToFromMenu(e, "kontakti")}
+                    className="flex-1 rounded-xl bg-ink px-4 py-3 text-center text-base font-semibold text-white"
                   >
-                    Sazināties
+                    {dict.nav.cta}
+                  </a>
+                  <a
+                    href={otherHref}
+                    hrefLang={otherLocale(locale)}
+                    aria-label={dict.nav.switchAria}
+                    className="rounded-xl border border-ink/12 px-5 py-3 text-center text-base font-semibold text-ink-soft"
+                  >
+                    {dict.nav.switchTo}
                   </a>
                 </li>
               </ul>

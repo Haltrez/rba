@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { projects, type Project } from "@/lib/data";
+import type { Dict, ProjectText } from "@/lib/i18n";
 import SectionHeading from "./SectionHeading";
 import Reveal from "./Reveal";
 import TiltCard from "./TiltCard";
@@ -20,7 +20,13 @@ function Tags({ tags }: { tags: string[] }) {
   );
 }
 
-function ProjectLinks({ project }: { project: Project }) {
+function ProjectLinks({
+  project,
+  codeLabel,
+}: {
+  project: ProjectText;
+  codeLabel: string;
+}) {
   return (
     <div className="flex flex-wrap items-center gap-3">
       {project.liveUrl && (
@@ -30,7 +36,7 @@ function ProjectLinks({ project }: { project: Project }) {
           rel="noopener noreferrer"
           className="inline-flex items-center gap-1.5 rounded-full bg-ink px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-accent"
         >
-          {project.liveLabel ?? "Live demo"}
+          {project.liveLabel ?? "Live"}
           <Icon name="arrow-up-right" className="h-4 w-4" />
         </a>
       )}
@@ -42,7 +48,7 @@ function ProjectLinks({ project }: { project: Project }) {
           className="inline-flex items-center gap-1.5 rounded-full border border-ink/15 px-5 py-2.5 text-sm font-semibold text-ink transition-colors hover:border-accent hover:text-accent"
         >
           <Icon name="github" className="h-4 w-4" />
-          Kods
+          {codeLabel}
         </a>
       )}
       {!project.liveUrl && !project.codeUrl && project.privateNote && (
@@ -54,11 +60,15 @@ function ProjectLinks({ project }: { project: Project }) {
   );
 }
 
-function Media({ project, sizes }: { project: Project; sizes: string }) {
+function Media({
+  project,
+  sizes,
+}: {
+  project: ProjectText;
+  sizes: string;
+}) {
   return (
     <div className="relative aspect-[16/10] overflow-hidden rounded-2xl border border-ink/8 bg-mist">
-      {/* TODO: attēli dzīvo public/projects mapē, ceļus maina lib/data.ts.
-          GIF failiem next/image der tāpat, tie tiks rādīti animēti. */}
       <Image
         src={project.image}
         alt={project.imageAlt}
@@ -73,18 +83,16 @@ function Media({ project, sizes }: { project: Project; sizes: string }) {
 const cardClass =
   "group flex h-full flex-col rounded-3xl border border-ink/8 bg-white p-5 shadow-card transition-all duration-300 hover:-translate-y-1 hover:border-accent/25 hover:shadow-glow sm:p-6";
 
-export default function Projects() {
-  const featured = projects.find((p) => p.featured);
-  const rest = projects.filter((p) => !p.featured);
+export default function Projects({ dict }: { dict: Dict }) {
+  const t = dict.projects;
+  const codeLabel = "Kods";
+  const featured = t.items.find((p) => p.featured);
+  const rest = t.items.filter((p) => !p.featured);
 
   return (
     <section id="projekti" className="scroll-mt-24 bg-mist py-24 sm:py-32">
       <div className="mx-auto max-w-6xl px-5">
-        <SectionHeading
-          eyebrow="Projekti"
-          title="No idejas līdz strādājošam produktam"
-          sub="Reāli produkti un automatizācijas ar īstiem lietotājiem, ne tikai eksperimenti."
-        />
+        <SectionHeading eyebrow={t.eyebrow} title={t.title} sub={t.sub} />
 
         <div className="grid gap-6">
           {/* Izceltais projekts ar stāstu par ideju */}
@@ -94,7 +102,7 @@ export default function Projects() {
                 <div className="grid gap-8 lg:grid-cols-2 lg:items-center">
                   <div className="flex min-w-0 flex-col gap-5">
                     <p className="text-xs font-semibold uppercase tracking-[0.22em] text-accent">
-                      Izceltais projekts
+                      {t.featuredLabel}
                     </p>
                     <div className="flex items-center gap-3">
                       {featured.logo && (
@@ -117,20 +125,15 @@ export default function Projects() {
                     {/* Ideja aiz Askjury */}
                     <div className="rounded-2xl border border-accent/15 bg-accent/5 p-5">
                       <p className="text-xs font-semibold uppercase tracking-[0.18em] text-accent">
-                        Ideja aiz projekta
+                        {t.ideaEyebrow}
                       </p>
                       <p className="mt-2.5 leading-relaxed text-ink">
-                        Mākslīgais intelekts pēc dabas ir noskaņots tev
-                        piekrist un teikt, ka tava ideja ir laba. Askjury to
-                        apgriež otrādi: promptēti aģenti ar dažādām lomām
-                        neglaimo, bet pasaka, kā ir. Katrs sniedz savu
-                        vērtējumu, un tu iegūsti godīgu, strukturētu verdiktu,
-                        nevis vienu patīkamu atbildi.
+                        {t.ideaText}
                       </p>
                     </div>
 
                     <Tags tags={featured.tags} />
-                    <ProjectLinks project={featured} />
+                    <ProjectLinks project={featured} codeLabel={codeLabel} />
                   </div>
                   <Media
                     project={featured}
@@ -169,7 +172,7 @@ export default function Projects() {
                       {project.tagline}
                     </p>
                     <Tags tags={project.tags} />
-                    <ProjectLinks project={project} />
+                    <ProjectLinks project={project} codeLabel={codeLabel} />
                   </div>
                 </TiltCard>
               </Reveal>

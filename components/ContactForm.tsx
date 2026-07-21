@@ -2,13 +2,15 @@
 
 import { useState } from "react";
 import { site } from "@/lib/data";
+import type { Dict } from "@/lib/i18n";
 
 type Status = "idle" | "sending" | "ok" | "error";
 
 const inputClass =
   "w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-slate-400 outline-none transition-colors focus:border-sky-300/60 focus:ring-2 focus:ring-sky-300/30";
 
-export default function ContactForm() {
+export default function ContactForm({ dict }: { dict: Dict }) {
+  const t = dict.contact;
   const [status, setStatus] = useState<Status>("idle");
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -23,7 +25,7 @@ export default function ContactForm() {
       ? `https://formspree.io/f/${site.formspreeId}`
       : `https://formsubmit.co/ajax/${site.email}`;
 
-    data.append("_subject", "Ziņa no rba.lv");
+    data.append("_subject", t.subject);
 
     setStatus("sending");
     try {
@@ -60,7 +62,7 @@ export default function ContactForm() {
             htmlFor="name"
             className="mb-2 block text-sm font-medium text-slate-200"
           >
-            Vārds
+            {t.nameLabel}
           </label>
           <input
             id="name"
@@ -68,7 +70,7 @@ export default function ContactForm() {
             type="text"
             required
             autoComplete="name"
-            placeholder="Tavs vārds"
+            placeholder={t.namePlaceholder}
             className={inputClass}
           />
         </div>
@@ -77,7 +79,7 @@ export default function ContactForm() {
             htmlFor="email"
             className="mb-2 block text-sm font-medium text-slate-200"
           >
-            E-pasts
+            {t.emailLabel}
           </label>
           <input
             id="email"
@@ -85,7 +87,7 @@ export default function ContactForm() {
             type="email"
             required
             autoComplete="email"
-            placeholder="tavs@epasts.lv"
+            placeholder={t.emailPlaceholder}
             className={inputClass}
           />
         </div>
@@ -95,14 +97,14 @@ export default function ContactForm() {
           htmlFor="message"
           className="mb-2 block text-sm font-medium text-slate-200"
         >
-          Ziņa
+          {t.messageLabel}
         </label>
         <textarea
           id="message"
           name="message"
           required
           rows={5}
-          placeholder="Pastāsti, ko gribi uzbūvēt vai automatizēt"
+          placeholder={t.messagePlaceholder}
           className={`${inputClass} resize-y`}
         />
       </div>
@@ -111,18 +113,17 @@ export default function ContactForm() {
         disabled={status === "sending"}
         className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-accent to-accent-bright px-8 py-3.5 font-semibold text-white shadow-glow transition-transform duration-300 hover:-translate-y-0.5 disabled:opacity-60"
       >
-        {status === "sending" ? "Sūta..." : "Nosūtīt ziņu"}
+        {status === "sending" ? t.submitSending : t.submitIdle}
       </button>
 
       <p aria-live="polite" className="min-h-5 text-sm">
         {status === "ok" && (
-          <span className="text-emerald-300">
-            Paldies! Ziņa ir nosūtīta, atbildēšu drīzumā.
-          </span>
+          <span className="text-emerald-300">{t.success}</span>
         )}
         {status === "error" && (
           <span className="text-red-300">
-            Neizdevās nosūtīt. Uzraksti man tieši: {site.email}
+            {t.errorPrefix}
+            {site.email}
           </span>
         )}
       </p>

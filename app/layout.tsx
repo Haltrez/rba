@@ -15,19 +15,18 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 const siteUrl = "https://rba.lv";
-const siteTitle =
-  "Roberts Būda | AI-native izstrādātājs un automatizācijas speciālists";
-const siteDescription =
-  "Būvēju AI aģentus, biznesa procesu automatizācijas un pilnus produktus no idejas līdz strādājošam risinājumam. Askjury, Wakify, SmartEmploy un citi projekti.";
 
+/* Kopīgie metadati; katra lapa (lv un /en) papildina savu title,
+   description un hreflang caur buildMetadata() (lib/metadata.ts). */
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: siteTitle,
-  description: siteDescription,
   keywords: [
     "AI izstrādātājs",
+    "AI developer",
     "AI aģenti",
+    "AI agents",
     "automatizācija",
+    "automation",
     "biznesa procesu automatizācija",
     "n8n",
     "Next.js",
@@ -36,29 +35,6 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Roberts Būda", url: siteUrl }],
   creator: "Roberts Būda",
-  alternates: { canonical: "/" },
-  openGraph: {
-    type: "website",
-    url: siteUrl,
-    siteName: "rba.lv",
-    locale: "lv_LV",
-    title: siteTitle,
-    description: siteDescription,
-    images: [
-      {
-        url: "/og.png",
-        width: 1200,
-        height: 630,
-        alt: "Roberts Būda, AI-native izstrādātājs",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: siteTitle,
-    description: siteDescription,
-    images: ["/og.png"],
-  },
   robots: { index: true, follow: true },
 };
 

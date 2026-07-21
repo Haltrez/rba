@@ -1,9 +1,11 @@
 import { site, socials } from "@/lib/data";
+import type { Dict } from "@/lib/i18n";
 import Reveal from "./Reveal";
 import ContactForm from "./ContactForm";
 import Icon from "./icons";
 
-export default function Contact() {
+export default function Contact({ dict }: { dict: Dict }) {
+  const t = dict.contact;
   return (
     <section
       id="kontakti"
@@ -19,14 +21,13 @@ export default function Contact() {
         <div className="grid gap-14 lg:grid-cols-2 lg:gap-16">
           <Reveal>
             <p className="text-sm font-semibold uppercase tracking-[0.22em] text-sky-300">
-              Kontakti
+              {t.eyebrow}
             </p>
             <h2 className="mt-3 font-display text-3xl font-bold tracking-tight sm:text-4xl lg:text-[2.75rem] lg:leading-[1.15]">
-              Sadarbosimies!
+              {t.heading}
             </h2>
             <p className="mt-5 max-w-md text-lg leading-relaxed text-slate-300">
-              Atvērts darba un projektu piedāvājumiem: AI aģenti,
-              automatizācijas, produkti. Uzraksti, un atbildēšu ātri.
+              {t.intro}
             </p>
 
             <ul className="mt-8 space-y-4">
@@ -73,12 +74,10 @@ export default function Contact() {
           <Reveal delay={0.15}>
             <div className="rounded-3xl border border-white/10 bg-white/5 p-7 backdrop-blur-md sm:p-8">
               <h3 className="font-display text-lg font-semibold">
-                Ātrā ziņa
+                {t.formTitle}
               </h3>
-              <p className="mb-6 mt-1 text-sm text-slate-400">
-                Vai vienkārši uzraksti uz e-pastu, kā tev ērtāk.
-              </p>
-              <ContactForm />
+              <p className="mb-6 mt-1 text-sm text-slate-400">{t.formSub}</p>
+              <ContactForm dict={dict} />
             </div>
           </Reveal>
         </div>

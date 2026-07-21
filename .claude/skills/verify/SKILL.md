@@ -6,6 +6,10 @@ description: Build, run and drive the rba.lv portfolio site to verify changes en
 # Verify rba.lv
 
 Single-page Next.js (App Router) + Tailwind v4 + Framer Motion static site. No backend.
+Bilingual: `/` (Latvian) and `/en` (English), both static. All UI copy lives in
+`lib/i18n.ts` (lv/en dicts); server jury strings in `lib/jury.ts`; locale-neutral
+contact/socials in `lib/data.ts`. Sections take a `dict` (and `locale`) prop from
+`components/Site.tsx`.
 
 ## Build and launch
 
@@ -48,4 +52,13 @@ Launch with `executablePath: "/opt/pw-browsers/chromium"`. Flows worth driving:
   - start server with OPENAI_API_KEY=sk-invalid: expect per-agent
     `failed: true` events then an `error` event, never a crash.
 
-Static assets to spot-check: /og.png /cv/roberts-buda-cv.pdf /robots.txt /sitemap.xml /icon.svg.
+Static assets to spot-check: /og.png /robots.txt /sitemap.xml /icon.svg.
+
+i18n checks:
+- `/` has `<html lang="lv">` + Latvian nav; `/en` renders English nav and
+  `document.documentElement.lang === "en"` (set client-side by SetHtmlLang).
+- Language toggle: `header a[hreflang="en"]` navigates to /en and back via
+  `a[hreflang="lv"]`. Both keep hreflang alternate + canonical link tags.
+- Jury demo sends `lang` in the POST body; verdict language must match the
+  locale (LV verdict in Latvian, EN verdict in English) — the moderator prompt
+  forces the output language per locale, so a mismatch is a regression.

@@ -17,20 +17,32 @@ npm run build
 npm run start
 ```
 
+## Divas valodas (LV / EN)
+
+Lapa ir divvalodu: latviešu ir `/`, angļu ir `/en`, ar pārslēdzi
+navigācijā. Katrai valodai ir atsevišķa URL ar pareiziem hreflang
+un canonical tagiem (laba SEO), un tās ir statiski ģenerētas.
+
+Viss teksts abās valodās dzīvo vienā failā: `lib/i18n.ts`. Struktūra
+`lv` un `en` blokiem ir identiska, tāpēc, mainot tekstu, maini to pašu
+abās vietās. Kontakti un soc. tīkli (valodneatkarīgi) ir `lib/data.ts`.
+Paneļa demo servera teksti ir `lib/jury.ts`.
+
 ## Kur nomainīt saturu
 
-Viss teksts un linki dzīvo vienā failā: `lib/data.ts`. Tur ir `TODO`
-komentāri pie katras vietas, kas jāaizpilda:
+Teksti un projektu apraksti: `lib/i18n.ts` (abās valodās). Kontakti un
+soc. tīkli: `lib/data.ts`. Tur ir `TODO` komentāri pie vietām, kas
+jāaizpilda:
 
-1. **Soc. tīkli**: `socials` masīvā pašlaik ir LinkedIn
+1. **Soc. tīkli**: `lib/data.ts` `socials` masīvā pašlaik ir LinkedIn
    (linkedin.com/in/robertsbuda). Vari pievienot citus pēc tā paša parauga.
-2. **Projektu linki**: katram projektam `liveUrl` un `codeUrl`. Ja links ir
-   `null`, poga netiek rādīta. Askjury, Wakify (App Store) un SmartEmploy
-   linki jau ir ielikti.
+2. **Projektu linki**: `lib/i18n.ts` katram projektam `liveUrl` un `codeUrl`
+   (abās valodās). Ja links ir `null`, poga netiek rādīta. Askjury, Wakify
+   (App Store) un SmartEmploy linki jau ir ielikti.
 3. **Projektu attēli**: ieliec savus ekrānuzņēmumus vai demo GIF failus mapē
-   `public/projects` un nomaini `image` ceļu attiecīgajam projektam.
-   Wakify jau ir kartītes attēls ar īsto ikonu; Askjury un automatizāciju
-   kartītēm vēl ir SVG placeholderi.
+   `public/projects` un nomaini `image` ceļu attiecīgajam projektam
+   (`lib/i18n.ts`). Askjury, Wakify un SmartEmploy jau ir kartīšu attēli;
+   automatizāciju kartītei vēl ir SVG placeholderis.
 4. **Kontaktu forma**: pēc noklusējuma ziņas sūta formsubmit.co uz
    `site.email` bez reģistrācijas. Pēc pirmās iesūtītās ziņas atnāks
    vienreizējs apstiprinājuma e-pasts no FormSubmit, tas jāapstiprina,

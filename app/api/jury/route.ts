@@ -1,4 +1,10 @@
-import { runJury, runJurySimulated, type JuryEvent } from "@/lib/jury";
+import {
+  runJury,
+  runJurySimulated,
+  juryStrings,
+  type JuryEvent,
+} from "@/lib/jury";
+import type { Locale } from "@/lib/i18n";
 
 /* Vercel: atļauj paneļa apspriedei līdz 60 sekundēm */
 export const maxDuration = 60;
@@ -25,30 +31,31 @@ function allow(ip: string): boolean {
 }
 
 export async function POST(req: Request) {
-  let idea: unknown;
+  let body: { idea?: unknown; lang?: unknown };
   try {
-    idea = ((await req.json()) as { idea?: unknown })?.idea;
+    body = (await req.json()) as { idea?: unknown; lang?: unknown };
   } catch {
-    return Response.json({ error: "Nederīgs pieprasījums." }, { status: 400 });
-  }
-
-  if (typeof idea !== "string") {
-    return Response.json({ error: "Nederīgs pieprasījums." }, { status: 400 });
-  }
-  const trimmed = idea.trim();
-  if (trimmed.length < 10 || trimmed.length > 400) {
     return Response.json(
-      { error: "Aprakstiet ideju 10 līdz 400 zīmēs." },
+      { error: juryStrings.lv.validation.invalid },
       { status: 400 },
     );
   }
 
+  const locale: Locale = body.lang === "en" ? "en" : "lv";
+  const t = juryStrings[locale];
+
+  const idea = body.idea;
+  if (typeof idea !== "string") {
+    return Response.json({ error: t.validation.invalid }, { status: 400 });
+  }
+  const trimmed = idea.trim();
+  if (trimmed.length < 10 || trimmed.length > 400) {
+    return Response.json({ error: t.validation.length }, { status: 400 });
+  }
+
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "anon";
   if (!allow(ip) || inFlight >= MAX_IN_FLIGHT) {
-    return Response.json(
-      { error: "Par daudz pieprasījumu. Uzgaidi minūti un mēģini vēlreiz." },
-      { status: 429 },
-    );
+    return Response.json({ error: t.validation.rateLimit }, { status: 429 });
   }
 
   const encoder = new TextEncoder();
@@ -59,15 +66,12 @@ export async function POST(req: Request) {
         controller.enqueue(encoder.encode(JSON.stringify(e) + "\n"));
       try {
         if (process.env.OPENAI_API_KEY) {
-          await runJury(trimmed, emit);
+          await runJury(trimmed, locale, emit);
         } else {
-          await runJurySimulated(trimmed, emit);
+          await runJurySimulated(trimmed, locale, emit);
         }
       } catch {
-        emit({
-          type: "error",
-          text: "Panelim šobrīd neizdodas sanākt. Pamēģini vēlreiz pēc brīža.",
-        });
+        emit({ type: "error", text: t.panelError });
       } finally {
         inFlight--;
         controller.close();

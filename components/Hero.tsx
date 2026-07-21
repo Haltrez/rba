@@ -9,6 +9,7 @@ import {
   useTransform,
 } from "framer-motion";
 import Icon from "./icons";
+import type { Dict } from "@/lib/i18n";
 
 const container = {
   hidden: {},
@@ -27,7 +28,8 @@ const item = {
 /* Gaismas plankuma izmērs (puse no 35rem = 560px) kursora centrēšanai */
 const SPOT_HALF = 280;
 
-export default function Hero() {
+export default function Hero({ dict }: { dict: Dict }) {
+  const t = dict.hero;
   const reduce = useReducedMotion();
   const sectionRef = useRef<HTMLElement>(null);
 
@@ -133,7 +135,7 @@ export default function Hero() {
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-70" />
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
               </span>
-              Atvērts jauniem projektiem
+              {t.badge}
             </span>
           </motion.div>
 
@@ -141,25 +143,25 @@ export default function Hero() {
             variants={item}
             className="mt-8 font-display text-5xl font-bold tracking-tight text-ink sm:text-6xl lg:text-7xl"
           >
-            Roberts Būda
+            {t.name}
           </motion.h1>
 
           <motion.p
             variants={item}
             className="mt-5 max-w-3xl font-display text-2xl font-semibold tracking-tight text-ink sm:text-3xl lg:text-4xl"
           >
-            Būvēju <span className="text-gradient">AI aģentus</span>,{" "}
-            <span className="text-gradient">automatizācijas</span> un pilnus
-            produktus.
+            {t.taglinePre}
+            <span className="text-gradient">{t.taglineWord1}</span>
+            {t.taglineMid}
+            <span className="text-gradient">{t.taglineWord2}</span>
+            {t.taglinePost}
           </motion.p>
 
           <motion.p
             variants={item}
             className="mt-6 max-w-2xl text-lg leading-relaxed text-ink-soft"
           >
-            AI-native izstrādātājs no Latvijas. No idejas līdz strādājošam
-            risinājumam: AI aģenti, biznesa procesu automatizācija, web un
-            mobilās lietotnes. AI vilnī kopš paša sākuma.
+            {t.sub}
           </motion.p>
 
           <motion.div
@@ -170,7 +172,7 @@ export default function Hero() {
               href="#projekti"
               className="group inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-accent to-accent-bright px-8 py-3.5 font-semibold text-white shadow-glow transition-transform duration-300 hover:-translate-y-0.5"
             >
-              Apskatīt projektus
+              {t.ctaProjects}
               <Icon
                 name="arrow-down"
                 className="h-4 w-4 transition-transform duration-300 group-hover:translate-y-0.5"
@@ -180,7 +182,7 @@ export default function Hero() {
               href="#kontakti"
               className="glass inline-flex items-center gap-2 rounded-full px-8 py-3.5 font-semibold text-ink shadow-card transition-all duration-300 hover:-translate-y-0.5 hover:text-accent"
             >
-              Sazināties
+              {t.ctaContact}
             </a>
           </motion.div>
         </motion.div>

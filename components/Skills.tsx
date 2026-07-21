@@ -1,20 +1,17 @@
-import { skillGroups } from "@/lib/data";
+import type { Dict } from "@/lib/i18n";
 import SectionHeading from "./SectionHeading";
 import Reveal from "./Reveal";
 import Icon from "./icons";
 
-export default function Skills() {
+export default function Skills({ dict }: { dict: Dict }) {
+  const t = dict.skills;
   return (
     <section id="prasmes" className="scroll-mt-24 bg-mist py-24 sm:py-32">
       <div className="mx-auto max-w-6xl px-5">
-        <SectionHeading
-          eyebrow="Prasmes"
-          title="Instrumenti, ar ko strādāju"
-          sub="AI pirmajā vietā, bet uz stabila inženierijas pamata."
-        />
+        <SectionHeading eyebrow={t.eyebrow} title={t.title} sub={t.sub} />
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {skillGroups.map((group, i) => (
+          {t.groups.map((group, i) => (
             <Reveal key={group.title} delay={i * 0.08} className="h-full">
               <div className="flex h-full flex-col rounded-3xl border border-ink/8 bg-white p-6 shadow-card transition-all duration-300 hover:-translate-y-1 hover:border-accent/25 hover:shadow-glow">
                 <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-accent to-accent-bright text-white shadow-glow">

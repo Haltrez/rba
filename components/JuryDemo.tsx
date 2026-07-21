@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { juryAgents, type AgentId } from "@/lib/jury-agents";
 import type { JuryEvent } from "@/lib/jury";
+import type { Dict, Locale } from "@/lib/i18n";
 import Icon from "./icons";
 
 type Phase = "idle" | "running" | "done" | "error";
@@ -13,7 +14,14 @@ type AgentAnswer = { text: string; failed?: boolean };
 const inputClass =
   "w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-slate-400 outline-none transition-colors focus:border-sky-300/60 focus:ring-2 focus:ring-sky-300/30";
 
-export default function JuryDemo() {
+export default function JuryDemo({
+  dict,
+  locale,
+}: {
+  dict: Dict;
+  locale: Locale;
+}) {
+  const t = dict.jury;
   const [idea, setIdea] = useState("");
   const [phase, setPhase] = useState<Phase>("idle");
   const [status, setStatus] = useState("");
@@ -39,21 +47,19 @@ export default function JuryDemo() {
     setVerdict(null);
     setSimulated(false);
     setError("");
-    setStatus("Sasaucu paneli...");
+    setStatus(t.statusStart);
 
     try {
       const res = await fetch("/api/jury", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ idea: trimmed }),
+        body: JSON.stringify({ idea: trimmed, lang: locale }),
       });
       if (!res.ok || !res.body) {
         const data = (await res.json().catch(() => null)) as {
           error?: string;
         } | null;
-        throw new Error(
-          data?.error ?? "Neizdevās sasaukt paneli. Pamēģini vēlreiz.",
-        );
+        throw new Error(data?.error ?? t.genericError);
       }
 
       let streamError = "";
@@ -93,11 +99,7 @@ export default function JuryDemo() {
     } catch (err) {
       setPhase("error");
       setStatus("");
-      setError(
-        err instanceof Error
-          ? err.message
-          : "Neizdevās sasaukt paneli. Pamēģini vēlreiz.",
-      );
+      setError(err instanceof Error ? err.message : t.genericError);
     }
   }
 
@@ -112,7 +114,7 @@ export default function JuryDemo() {
       <div className="relative">
         <form onSubmit={run} className="flex flex-col gap-3 sm:flex-row">
           <label htmlFor="idea" className="sr-only">
-            Tava ideja
+            {t.ideaLabel}
           </label>
           <input
             id="idea"
@@ -120,7 +122,7 @@ export default function JuryDemo() {
             value={idea}
             onChange={(e) => setIdea(e.target.value)}
             maxLength={400}
-            placeholder="Piem.: aplikācija, kas plāno maltītes pēc ledusskapja satura"
+            placeholder={t.placeholder}
             className={`${inputClass} flex-1`}
           />
           <button
@@ -128,7 +130,7 @@ export default function JuryDemo() {
             disabled={!canSubmit}
             className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-accent to-accent-bright px-7 py-3 font-semibold text-white shadow-glow transition-transform duration-300 hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            {phase === "running" ? "Panelis strādā..." : "Sasaukt paneli"}
+            {phase === "running" ? t.submitRunning : t.submitIdle}
           </button>
         </form>
 
@@ -146,6 +148,7 @@ export default function JuryDemo() {
         <div className="mt-6 grid gap-4 sm:grid-cols-3">
           {juryAgents.map((agent) => {
             const answer = answers[agent.id];
+            const meta = t.agents[agent.id];
             return (
               <div
                 key={agent.id}
@@ -157,10 +160,10 @@ export default function JuryDemo() {
                   </span>
                   <div className="min-w-0">
                     <p className="font-display text-sm font-semibold">
-                      {agent.name}
+                      {meta.name}
                     </p>
                     <p className="truncate text-xs text-slate-400">
-                      {agent.role}
+                      {meta.role}
                     </p>
                   </div>
                 </div>
@@ -179,7 +182,7 @@ export default function JuryDemo() {
                       {answer.text}
                     </motion.p>
                   ) : phase === "running" ? (
-                    <span className="flex gap-1.5 pt-1" aria-label="Aģents domā">
+                    <span className="flex gap-1.5 pt-1" aria-label={t.thinking}>
                       {[0, 1, 2].map((i) => (
                         <span
                           key={i}
@@ -189,9 +192,7 @@ export default function JuryDemo() {
                       ))}
                     </span>
                   ) : (
-                    <p className="text-sm text-slate-500">
-                      Gaida tavu ideju...
-                    </p>
+                    <p className="text-sm text-slate-500">{t.waiting}</p>
                   )}
                 </div>
               </div>
@@ -207,7 +208,7 @@ export default function JuryDemo() {
             className="mt-6 rounded-2xl border border-sky-300/20 bg-white/5 p-5 sm:p-6"
           >
             <p className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-300">
-              Paneļa verdikts
+              {t.verdictLabel}
             </p>
             <div className="mt-3 flex items-center gap-5">
               {verdict.score !== null && (
@@ -236,10 +237,7 @@ export default function JuryDemo() {
         )}
 
         {simulated && (
-          <p className="mt-4 text-xs text-slate-500">
-            Simulācijas režīms: parauga atbildes bez API izsaukuma. Pievieno
-            OPENAI_API_KEY vides mainīgo, lai panelis domā pa īstam.
-          </p>
+          <p className="mt-4 text-xs text-slate-500">{t.simulatedNote}</p>
         )}
       </div>
     </div>
