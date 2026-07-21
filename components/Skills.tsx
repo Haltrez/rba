@@ -5,7 +5,7 @@ import Icon from "./icons";
 
 export default function Skills() {
   return (
-    <section id="prasmes" className="scroll-mt-24 py-24 sm:py-32">
+    <section id="prasmes" className="scroll-mt-24 bg-mist py-24 sm:py-32">
       <div className="mx-auto max-w-6xl px-5">
         <SectionHeading
           eyebrow="Prasmes"

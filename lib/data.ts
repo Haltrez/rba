@@ -47,6 +47,7 @@ export const socials: Social[] = [
 
 export const navLinks = [
   { href: "#projekti", label: "Projekti" },
+  { href: "#demo", label: "Demo" },
   { href: "#prasmes", label: "Prasmes" },
   { href: "#par-mani", label: "Par mani" },
   { href: "#kontakti", label: "Kontakti" },

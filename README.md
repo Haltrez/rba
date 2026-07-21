@@ -45,6 +45,32 @@ komponentēs mapē `components`.
 Svarīgi: nekad neliec lapā vai koda fragmentos īstas API atslēgas,
 `.env` saturu vai klientu datus.
 
+## AI paneļa demo (OpenAI)
+
+Sadaļa "Sasauc AI ekspertu paneli" ir dzīvs aģentu demo: trīs aģenti
+ar dažādām lomām paralēli izvērtē apmeklētāja ideju, tad moderators
+sagatavo verdiktu ar punktiem. Orķestrācija ir `lib/jury.ts`, API
+route `app/api/jury/route.ts`, UI `components/JuryDemo.tsx`.
+
+Atslēgas pievienošana (atslēga dzīvo TIKAI vides mainīgajos, nekad kodā):
+
+1. Lokāli: nokopē `.env.example` kā `.env.local` un ieliec
+   `OPENAI_API_KEY=sk-...`. Fails ir gitignorēts, tas nenonāks GitHub.
+2. Vercel: projektā atver **Settings, tad Environment Variables** un
+   pievieno `OPENAI_API_KEY` (Production un Preview vidēm). Pēc tam
+   uztaisi jaunu deploy.
+3. Ja atslēgas nav, demo strādā simulācijas režīmā ar iezīmētām
+   parauga atbildēm, sekcija vienmēr izskatās dzīva.
+
+Izmaksu kontrole: noklusējuma modelis ir lētais `gpt-4o-mini`
+(maināms ar `OPENAI_MODEL`), atbildes ir īsas (ierobežots max_tokens),
+ideja līdz 400 zīmēm, un API route ir vienkāršs pieprasījumu limits
+(4 minūtē no vienas IP). Papildus tam OpenAI kontā ieteicams uzstādīt
+mēneša tēriņu limitu (platform.openai.com sadaļā Billing > Limits).
+
+Ja atslēga nejauši nonāk publiski (čatā, commitā, ekrānšāviņā),
+uzreiz izveido jaunu un veco dzēs.
+
 ## Deploy uz Vercel
 
 1. Aizpusho repozitoriju uz GitHub.

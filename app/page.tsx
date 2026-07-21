@@ -1,6 +1,7 @@
 import Nav from "@/components/Nav";
 import Hero from "@/components/Hero";
 import Projects from "@/components/Projects";
+import JurySection from "@/components/JurySection";
 import Skills from "@/components/Skills";
 import About from "@/components/About";
 import Contact from "@/components/Contact";
@@ -19,6 +20,7 @@ export default function Home() {
       <main id="saturs">
         <Hero />
         <Projects />
+        <JurySection />
         <Skills />
         <About />
         <Contact />

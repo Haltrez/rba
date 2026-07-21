@@ -37,5 +37,14 @@ Launch with `executablePath: "/opt/pw-browsers/chromium"`. Flows worth driving:
   animation cancels native fragment smooth scroll.
 - `reducedMotion: "reduce"` context: h1 opacity must be 1 (Reveal initial=false path).
 - Assert no console errors, no pageerror, no responses >= 400.
+- Hero mouse parallax: `page.mouse.move` to opposite corners, then read the
+  bounding rect of `#sakums .animate-blob-a`'s parent; x must shift ~100px.
+- Jury demo (`#demo`, POST /api/jury, NDJSON stream):
+  - no OPENAI_API_KEY: fill `#idea`, submit, wait for "Paneļa verdikts",
+    expect 7/10 verdict and the "Simulācijas režīms" note.
+  - curl probes: idea under 10 chars gives 400; non-JSON body gives 400;
+    5th request in a minute from one X-Forwarded-For gives 429.
+  - start server with OPENAI_API_KEY=sk-invalid: expect per-agent
+    `failed: true` events then an `error` event, never a crash.
 
 Static assets to spot-check: /og.png /cv/roberts-buda-cv.pdf /robots.txt /sitemap.xml /icon.svg.

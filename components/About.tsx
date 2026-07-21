@@ -26,7 +26,7 @@ const facts = [
 
 export default function About() {
   return (
-    <section id="par-mani" className="scroll-mt-24 bg-mist py-24 sm:py-32">
+    <section id="par-mani" className="scroll-mt-24 py-24 sm:py-32">
       <div className="mx-auto max-w-6xl px-5">
         <div className="grid items-center gap-12 lg:grid-cols-[1.15fr_1fr] lg:gap-16">
           <Reveal>

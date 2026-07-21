@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   motion,
   useMotionValue,
@@ -24,106 +24,165 @@ const item = {
   },
 };
 
+/* Gaismas plankuma izmērs (puse no 35rem = 560px) kursora centrēšanai */
+const SPOT_HALF = 280;
+
 export default function Hero() {
   const reduce = useReducedMotion();
+  const sectionRef = useRef<HTMLElement>(null);
 
-  /* Smalks parallax: aurora bloki seko kursoram (tikai precīziem kursoriem) */
-  const [parallaxOn, setParallaxOn] = useState(false);
+  /* Fona kustība ar peli: tikai precīziem kursoriem un bez reduced-motion */
+  const [fxOn, setFxOn] = useState(false);
   useEffect(() => {
     const fine = window.matchMedia("(hover: hover) and (pointer: fine)");
-    setParallaxOn(fine.matches && !reduce);
+    setFxOn(fine.matches && !reduce);
   }, [reduce]);
 
+  /* Normalizēta kursora pozīcija (-0.5 .. 0.5) */
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
-  const sx = useSpring(mx, { stiffness: 55, damping: 20 });
-  const sy = useSpring(my, { stiffness: 55, damping: 20 });
-  const blobX = useTransform(sx, [-0.5, 0.5], [-26, 26]);
-  const blobY = useTransform(sy, [-0.5, 0.5], [-18, 18]);
+  const sx = useSpring(mx, { stiffness: 60, damping: 18 });
+  const sy = useSpring(my, { stiffness: 60, damping: 18 });
+
+  /* Katram slānim savs dziļums un virziens, tas rada telpiskuma sajūtu */
+  const blobAX = useTransform(sx, [-0.5, 0.5], [-60, 60]);
+  const blobAY = useTransform(sy, [-0.5, 0.5], [-40, 40]);
+  const blobBX = useTransform(sx, [-0.5, 0.5], [85, -85]);
+  const blobBY = useTransform(sy, [-0.5, 0.5], [55, -55]);
+  const blobCX = useTransform(sx, [-0.5, 0.5], [-110, 110]);
+  const blobCY = useTransform(sy, [-0.5, 0.5], [65, -65]);
+  const gridX = useTransform(sx, [-0.5, 0.5], [18, -18]);
+  const gridY = useTransform(sy, [-0.5, 0.5], [12, -12]);
+  const contentX = useTransform(sx, [-0.5, 0.5], [10, -10]);
+  const contentY = useTransform(sy, [-0.5, 0.5], [6, -6]);
+
+  /* Kursoram sekojošs gaismas plankums */
+  const spotX = useMotionValue(-9999);
+  const spotY = useMotionValue(-9999);
+  const sSpotX = useSpring(spotX, { stiffness: 140, damping: 24 });
+  const sSpotY = useSpring(spotY, { stiffness: 140, damping: 24 });
 
   function onMouseMove(e: React.MouseEvent) {
-    if (!parallaxOn) return;
+    if (!fxOn) return;
     mx.set(e.clientX / window.innerWidth - 0.5);
     my.set(e.clientY / window.innerHeight - 0.5);
+    const r = sectionRef.current?.getBoundingClientRect();
+    if (r) {
+      spotX.set(e.clientX - r.left - SPOT_HALF);
+      spotY.set(e.clientY - r.top - SPOT_HALF);
+    }
+  }
+
+  function onMouseLeave() {
+    mx.set(0);
+    my.set(0);
+    spotX.set(-9999);
+    spotY.set(-9999);
   }
 
   return (
     <section
       id="sakums"
+      ref={sectionRef}
       onMouseMove={onMouseMove}
+      onMouseLeave={onMouseLeave}
       className="relative flex min-h-svh items-center overflow-hidden"
     >
-      {/* Animētais aurora fons */}
+      {/* Animētais aurora fons ar peles parallaksu slāņos */}
       <div aria-hidden className="absolute inset-0">
-        <motion.div style={{ x: blobX, y: blobY }} className="absolute inset-0">
+        <motion.div style={{ x: blobAX, y: blobAY }} className="absolute inset-0">
           <div className="animate-blob-a absolute -left-24 -top-32 h-[34rem] w-[34rem] rounded-full bg-gradient-to-br from-accent-bright/30 to-sky-300/25 blur-3xl" />
+        </motion.div>
+        <motion.div style={{ x: blobBX, y: blobBY }} className="absolute inset-0">
           <div className="animate-blob-b absolute -right-32 top-1/3 h-[30rem] w-[30rem] rounded-full bg-gradient-to-bl from-indigo-400/25 to-accent/15 blur-3xl" />
+        </motion.div>
+        <motion.div style={{ x: blobCX, y: blobCY }} className="absolute inset-0">
           <div className="animate-blob-c absolute -bottom-40 left-1/3 h-[28rem] w-[28rem] rounded-full bg-gradient-to-tr from-sky-300/30 to-blue-200/30 blur-3xl" />
         </motion.div>
-        <div className="bg-grid-fade absolute inset-0" />
+        {fxOn && (
+          <motion.div
+            style={{
+              x: sSpotX,
+              y: sSpotY,
+              background:
+                "radial-gradient(circle, rgb(59 130 246 / 0.16), transparent 62%)",
+            }}
+            className="pointer-events-none absolute left-0 top-0 h-[35rem] w-[35rem] rounded-full"
+          />
+        )}
+        <motion.div
+          style={{ x: gridX, y: gridY }}
+          className="bg-grid-fade absolute -inset-6"
+        />
       </div>
 
+      {/* Saturs ar smalku pretkustību dziļumam */}
       <motion.div
-        variants={container}
-        initial={reduce ? false : "hidden"}
-        animate="show"
-        className="relative mx-auto flex w-full max-w-4xl flex-col items-center px-5 pb-24 pt-36 text-center sm:pt-40"
+        style={{ x: contentX, y: contentY }}
+        className="relative mx-auto w-full max-w-4xl"
       >
-        <motion.div variants={item}>
-          <span className="glass inline-flex items-center gap-2.5 rounded-full px-4 py-1.5 text-sm font-medium text-ink-soft shadow-card">
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-70" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
-            </span>
-            Atvērts jauniem projektiem
-          </span>
-        </motion.div>
-
-        <motion.h1
-          variants={item}
-          className="mt-8 font-display text-5xl font-bold tracking-tight text-ink sm:text-6xl lg:text-7xl"
-        >
-          Roberts Būda
-        </motion.h1>
-
-        <motion.p
-          variants={item}
-          className="mt-5 max-w-3xl font-display text-2xl font-semibold tracking-tight text-ink sm:text-3xl lg:text-4xl"
-        >
-          Būvēju <span className="text-gradient">AI aģentus</span>,{" "}
-          <span className="text-gradient">automatizācijas</span> un pilnus
-          produktus.
-        </motion.p>
-
-        <motion.p
-          variants={item}
-          className="mt-6 max-w-2xl text-lg leading-relaxed text-ink-soft"
-        >
-          AI-native izstrādātājs no Latvijas. No idejas līdz strādājošam
-          risinājumam: AI aģenti, biznesa procesu automatizācija, web un
-          mobilās lietotnes. AI vilnī kopš paša sākuma.
-        </motion.p>
-
         <motion.div
-          variants={item}
-          className="mt-10 flex flex-col items-center gap-4 sm:flex-row"
+          variants={container}
+          initial={reduce ? false : "hidden"}
+          animate="show"
+          className="flex flex-col items-center px-5 pb-24 pt-36 text-center sm:pt-40"
         >
-          <a
-            href="#projekti"
-            className="group inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-accent to-accent-bright px-8 py-3.5 font-semibold text-white shadow-glow transition-transform duration-300 hover:-translate-y-0.5"
+          <motion.div variants={item}>
+            <span className="glass inline-flex items-center gap-2.5 rounded-full px-4 py-1.5 text-sm font-medium text-ink-soft shadow-card">
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-70" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+              </span>
+              Atvērts jauniem projektiem
+            </span>
+          </motion.div>
+
+          <motion.h1
+            variants={item}
+            className="mt-8 font-display text-5xl font-bold tracking-tight text-ink sm:text-6xl lg:text-7xl"
           >
-            Apskatīt projektus
-            <Icon
-              name="arrow-down"
-              className="h-4 w-4 transition-transform duration-300 group-hover:translate-y-0.5"
-            />
-          </a>
-          <a
-            href="#kontakti"
-            className="glass inline-flex items-center gap-2 rounded-full px-8 py-3.5 font-semibold text-ink shadow-card transition-all duration-300 hover:-translate-y-0.5 hover:text-accent"
+            Roberts Būda
+          </motion.h1>
+
+          <motion.p
+            variants={item}
+            className="mt-5 max-w-3xl font-display text-2xl font-semibold tracking-tight text-ink sm:text-3xl lg:text-4xl"
           >
-            Sazināties
-          </a>
+            Būvēju <span className="text-gradient">AI aģentus</span>,{" "}
+            <span className="text-gradient">automatizācijas</span> un pilnus
+            produktus.
+          </motion.p>
+
+          <motion.p
+            variants={item}
+            className="mt-6 max-w-2xl text-lg leading-relaxed text-ink-soft"
+          >
+            AI-native izstrādātājs no Latvijas. No idejas līdz strādājošam
+            risinājumam: AI aģenti, biznesa procesu automatizācija, web un
+            mobilās lietotnes. AI vilnī kopš paša sākuma.
+          </motion.p>
+
+          <motion.div
+            variants={item}
+            className="mt-10 flex flex-col items-center gap-4 sm:flex-row"
+          >
+            <a
+              href="#projekti"
+              className="group inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-accent to-accent-bright px-8 py-3.5 font-semibold text-white shadow-glow transition-transform duration-300 hover:-translate-y-0.5"
+            >
+              Apskatīt projektus
+              <Icon
+                name="arrow-down"
+                className="h-4 w-4 transition-transform duration-300 group-hover:translate-y-0.5"
+              />
+            </a>
+            <a
+              href="#kontakti"
+              className="glass inline-flex items-center gap-2 rounded-full px-8 py-3.5 font-semibold text-ink shadow-card transition-all duration-300 hover:-translate-y-0.5 hover:text-accent"
+            >
+              Sazināties
+            </a>
+          </motion.div>
         </motion.div>
       </motion.div>
 
